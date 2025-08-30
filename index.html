@@ -289,8 +289,11 @@ loadMapImage(B.name, "b_map_img");
     }
 // Minimalist map loader with all ISO country codes
 // Minimalist map loader with ISO country codes (case-insensitive + aliases)
+// Minimalist map loader with ISO country codes (handles lowercase, uppercase, aliases)
 function loadMapImage(name, targetId) {
   if (!name) return;
+  
+  // Always normalize input: trim spaces and lowercase
   const input = name.trim().toLowerCase();
 
   const mapping = {
@@ -436,13 +439,6 @@ function loadMapImage(name, targetId) {
   }
 }
 
-  const code = mapping[name];
-  if (code) {
-    byId(targetId).src = `https://flagcdn.com/${code}.svg`;
-  } else {
-    byId(targetId).src = "";
-  }
-}
 
     // init UI
     mkSliders("slidersA", A);
