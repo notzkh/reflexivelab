@@ -358,13 +358,22 @@ loadMapImage(B.name, "b_map_img");
 
       const res = compute(A,B);
 
-      // bars
-      const P = Math.round(res.impact.perception*100);
-      const Q = Math.round(res.impact.policy*100);
-      const S = Math.round(res.impact.stability*100);
-      byId("p_bar").style.width = P+"%"; byId("p_pct").textContent = P+"%";
-      byId("q_bar").style.width = Q+"%"; byId("q_pct").textContent = Q+"%";
-      byId("s_bar").style.width = S+"%"; byId("s_pct").textContent = S+"%";
+      // bars (animate from 0 each time)
+byId("p_bar").style.width = "0%";
+byId("q_bar").style.width = "0%";
+byId("s_bar").style.width = "0%";
+
+byId("p_pct").textContent = P+"%";
+byId("q_pct").textContent = Q+"%";
+byId("s_pct").textContent = S+"%";
+
+// force reset → then animate
+setTimeout(() => {
+  byId("p_bar").style.width = P+"%";
+  byId("q_bar").style.width = Q+"%";
+  byId("s_bar").style.width = S+"%";
+}, 50);
+
 
       // layers
       byId("x0v").textContent = Math.round(res.layers.x0*100)+"%";
