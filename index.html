@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ReflexiveLab — Lefebvre Simulator (A → B)</title>
+  <style>
+    :root { --bg:#f8f8fb; --card:#ffffff; --text:#0f172a; --muted:#64748b; --line:#e5e7eb; --accent:#111827; }
+    * { box-sizing: border-box; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    body { margin:0; background:linear-gradient(#fafafa,#fff); color:var(--text); }
+    .wrap { max-width: 1100px; margin: 32px auto; padding: 0 16px; }
+    .row { display:grid; gap:16px; }
+    @media (min-width: 900px){ .row.cols-2{ grid-template-columns:1fr 1fr } .row.cols-3{ grid-template-columns:2fr 1fr 1fr } }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow: 0 6px 20px rgba(0,0,0,0.04); }
+    h1 { margin:0 0 6px 0; font-weight:700; }
+    h2 { margin:0 0 10px 0; font-size:18px; }
+    label{ font-size:13px; color:var(--muted); display:block; margin-bottom:6px; }
+    input[type="text"], select { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; }
+    .slider-row{ margin-bottom:10px; }
+    .slider-label{ display:flex; justify-content:space-between; font-size:13px; color:var(--muted); }
+    input[type="range"]{ width:100%; }
+    .btn { cursor:pointer; background:#111827; color:#fff; border:none; padding:10px 14px; border-radius:10px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .bar { background:#eef2ff; height:14px; border-radius:999px; position:relative; overflow:hidden; }
+    .bar > i{ position:absolute; left:0; top:0; bottom:0; background:#111827; width:0%; transition:width .4s ease; }
+    .pill{ background:#f1f5f9; padding:6px 10px; border-radius:999px; font-size:12px; }
+    .list { display:grid; gap:8px; }
+    .rowline{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .note{ font-size:13px; color:#334155; line-height:1.4; }
+    .foot{ font-size:12px; color:#6b7280; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="row">
+      <div>
+        <h1>ReflexiveLab</h1>
+        <div class="muted">Lefebvre-inspired, educational simulator of reflexive influence from Actor A → Actor B.</div>
+      </div>
+    </header>
+
+    <div class="row cols-2" style="margin-top:16px">
+      <div class="card">
+        <h2>1) Actors</h2>
+        <div class="row cols-2">
+          <div>
+            <label>Actor A (influencer)</label>
+            <input id="a_name" type="text" value="Actor A"/>
+          </div>
+          <div>
+            <label>Actor B (target)</label>
+            <input id="b_name" type="text" value="Actor B"/>
+          </div>
+        </div>
+        <div class="row cols-2" style="margin-top:10px">
+          <div>
+            <label>Ethics of A</label>
+            <select id="a_eth">
+              <option>Type I (Internal/Conscience-centric)</option>
+              <option selected>Type II (External/Authority-centric)</option>
+            </select>
+          </div>
+          <div>
+            <label>Ethics of B</label>
+            <select id="b_eth">
+              <option selected>Type I (Internal/Conscience-centric)</option>
+              <option>Type II (External/Authority-centric)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2) Scenario (quick presets)</h2>
+        <div class="row" style="grid-template-columns: repeat(5, minmax(0,1fr)); gap:8px;">
+          <button class="btn" onclick="preset('Elections')">Elections</button>
+          <button class="btn" onclick="preset('Border')">Border</button>
+          <button class="btn" onclick="preset('Sanctions')">Sanctions</button>
+          <button class="btn" onclick="preset('Cyber')">Cyber</button>
+          <button class="btn" onclick="preset('Custom')">Custom</button>
+        </div>
+        <div class="foot" style="margin-top:8px">Pick a preset, then fine-tune sliders below.</div>
+      </div>
+    </div>
+
+    <div class="row cols-2" style="margin-top:16px">
+      <div class="card">
+        <h2>3) A — traits</h2>
+        <div id="slidersA"></div>
+      </div>
+      <div class="card">
+        <h2>4) B — traits</h2>
+        <div id="slidersB"></div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="btn" onclick="run()">Run analysis</button>
+      <button class="btn" onclick="exportJSON()">Export JSON</button>
+      <div class="foot">Tip: raise A’s “Info Ops Intensity” and B’s “Media Penetration” (with low B “Resilience”) to see x₂ rise.</div>
+    </div>
+
+    <div class="row cols-3" style="margin-top:16px">
+      <div class="card">
+        <h2>Impact channels (A → B)</h2>
+        <div class="row">
+          <div class="rowline"><span>Perception</span><span class="pill" id="p_pct">0%</span></div>
+          <div class="bar"><i id="p_bar"></i></div>
+
+          <div class="rowline" style="margin-top:8px"><span>Policy</span><span class="pill" id="q_pct">0%</span></div>
+          <div class="bar"><i id="q_bar"></i></div>
+
+          <div class="rowline" style="margin-top:8px"><span>Stability</span><span class="pill" id="s_pct">0%</span></div>
+          <div class="bar"><i id="s_bar"></i></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Likely A → B posture</h2>
+        <div class="list" id="actions"></div>
+      </div>
+
+      <div class="card">
+        <h2>Reflexive layers</h2>
+        <div class="row">
+          <div class="rowline"><span>x₀ (self-image)</span><span class="pill" id="x0v">—</span></div>
+          <div class="rowline"><span>x₁ (image of B)</span><span class="pill" id="x1v">—</span></div>
+          <div class="rowline"><span>x₂ (what A thinks B thinks of A)</span><span class="pill" id="x2v">—</span></div>
+          <div class="rowline" style="border-top:1px solid var(--line); padding-top:8px"><span>rf (reflexive factor)</span><span class="pill" id="rfv">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h2>Analytical note</h2>
+      <div class="note" id="note">Pick a preset and click “Run analysis.” This tool is inspired by Lefebvre’s reflexive theory and is for educational analysis only.</div>
+      <div class="foot" style="margin-top:8px">Ethics: Type I favors internal conscience; Type II favors external/authority “good.” Use responsibly.</div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- helpers ----------
+    const clamp01 = x => Math.max(0, Math.min(1, x));
+    const sig = z => 1 / (1 + Math.exp(-z));
+    const byId = id => document.getElementById(id);
+
+    const TRAITS = [
+      ["riskTolerance","Risk tolerance"],
+      ["domesticFragility","Domestic fragility"],
+      ["capabilities","Capabilities"],
+      ["infoOpsIntensity","Info ops intensity"],
+      ["mediaPenetration","Media penetration (in target)"],
+      ["alliancePressure","Alliance pressure (against you)"],
+      ["resilience","Resilience (civic / media / institutions)"]
+    ];
+
+    let A = { name:"Actor A", ethicalType:"Type II (External/Authority-centric)", riskTolerance:.55, domesticFragility:.35, capabilities:.60, infoOpsIntensity:.70, mediaPenetration:.60, alliancePressure:.20, resilience:.50 };
+    let B = { name:"Actor B", ethicalType:"Type I (Internal/Conscience-centric)", riskTolerance:.40, domesticFragility:.45, capabilities:.50, infoOpsIntensity:.40, mediaPenetration:.55, alliancePressure:.60, resilience:.60 };
+
+    function ethicsWeights(t){ return t.includes("Type I") ? {internal:.7, external:.3} : {internal:.3, external:.7}; }
+
+    function mkSliders(containerId, who){
+      const el = byId(containerId);
+      el.innerHTML = "";
+      TRAITS.forEach(([key, label])=>{
+        const value = who===A ? A[key] : B[key];
+        const row = document.createElement("div");
+        row.className="slider-row";
+        row.innerHTML = `
+          <div class="slider-label"><span>${label}</span><span id="${containerId}_${key}_v">${Math.round(value*100)}%</span></div>
+          <input type="range" min="0" max="1" step="0.01" value="${value}" id="${containerId}_${key}">
+        `;
+        el.appendChild(row);
+        byId(`${containerId}_${key}`).addEventListener("input", (e)=>{
+          (who===A ? A : B)[key] = +e.target.value;
+          byId(`${containerId}_${key}_v`).textContent = Math.round(+e.target.value*100) + "%";
+        });
+      });
+    }
+
+    function preset(which){
+      const aEth = byId("a_eth").value, bEth = byId("b_eth").value;
+      if(which==="Elections"){
+        A = { ...A, ethicalType:aEth, riskTolerance:.55, domesticFragility:.35, infoOpsIntensity:.70, mediaPenetration:.60, capabilities:.60, alliancePressure:.20, resilience:.50 };
+        B = { ...B, ethicalType:bEth, riskTolerance:.40, domesticFragility:.45, infoOpsIntensity:.40, mediaPenetration:.55, capabilities:.50, alliancePressure:.60, resilience:.60 };
+      } else if(which==="Border"){
+        A = { ...A, ethicalType:aEth, riskTolerance:.70, domesticFragility:.30, infoOpsIntensity:.50, mediaPenetration:.50, capabilities:.70, alliancePressure:.30, resilience:.55 };
+        B = { ...B, ethicalType:bEth, riskTolerance:.50, domesticFragility:.40, infoOpsIntensity:.35, mediaPenetration:.50, capabilities:.60, alliancePressure:.65, resilience:.65 };
+      } else if(which==="Sanctions"){
+        A = { ...A, ethicalType:aEth, riskTolerance:.45, domesticFragility:.50, infoOpsIntensity:.50, mediaPenetration:.60, capabilities:.55, alliancePressure:.50, resilience:.60 };
+        B = { ...B, ethicalType:bEth, riskTolerance:.55, domesticFragility:.35, infoOpsIntensity:.60, mediaPenetration:.55, capabilities:.60, alliancePressure:.25, resilience:.55 };
+      } else if(which==="Cyber"){
+        A = { ...A, ethicalType:aEth, riskTolerance:.60, domesticFragility:.40, infoOpsIntensity:.80, mediaPenetration:.65, capabilities:.55, alliancePressure:.35, resilience:.55 };
+        B = { ...B, ethicalType:bEth, riskTolerance:.45, domesticFragility:.45, infoOpsIntensity:.45, mediaPenetration:.60, capabilities:.55, alliancePressure:.60, resilience:.65 };
+      } else {
+        A = { ...A, ethicalType:aEth };
+        B = { ...B, ethicalType:bEth };
+      }
+      mkSliders("slidersA", A);
+      mkSliders("slidersB", B);
+    }
+
+    function compute(A,B){
+      const wA = ethicsWeights(A.ethicalType);
+      const x0 = clamp01(0.6*(1 - A.domesticFragility) + 0.4*A.riskTolerance);
+      const x1 = clamp01(0.5*B.capabilities + 0.5*(1 - B.alliancePressure));
+      const x2 = clamp01(sig(3*(B.infoOpsIntensity*A.mediaPenetration - A.resilience)));
+      const rf = clamp01(0.4*x0 + 0.3*x1 + 0.3*x2);
+
+      const capRatio = clamp01((A.capabilities + 1e-6) / (A.capabilities + B.capabilities + 1e-6));
+      const E_perc = clamp01(sig(2.0*(A.infoOpsIntensity*B.mediaPenetration - B.resilience) + 1.2*rf));
+      const E_pol  = clamp01(sig(2.2*(capRatio - B.alliancePressure) + 0.8*rf));
+      const E_stab = clamp01(sig(2.0*(B.domesticFragility*A.infoOpsIntensity - B.resilience) + 1.0*rf));
+
+      const pCoop = sig(3*(0.6*(1-A.riskTolerance)+0.4*(1-capRatio)) - 1.2 + 0.6*(1-B.alliancePressure));
+      const pCoer = sig(3*(0.5*capRatio + 0.5*A.riskTolerance) + 0.5*rf - 1.0);
+      const pDecv = sig(3*(0.6*A.infoOpsIntensity + 0.4*rf) - 0.8);
+      const pDees = sig(3*(0.6*B.alliancePressure + 0.4*(1-A.riskTolerance)) - 0.9);
+      const sum = pCoop + pCoer + pDecv + pDees + 1e-9;
+
+      return {
+        layers: { x0, x1, x2, rf, capRatio },
+        impact: { perception:E_perc, policy:E_pol, stability:E_stab },
+        actions: [
+          { key:"Cooperate / Engage", p: pCoop/sum },
+          { key:"Coerce / Compel",   p: pCoer/sum },
+          { key:"Deceive / Influence (IO)", p: pDecv/sum },
+          { key:"De-escalate / Pause", p: pDees/sum }
+        ]
+      };
+    }
+
+    function run(){
+      A.name = byId("a_name").value; B.name = byId("b_name").value;
+      A.ethicalType = byId("a_eth").value; B.ethicalType = byId("b_eth").value;
+
+      const res = compute(A,B);
+
+      // bars
+      const P = Math.round(res.impact.perception*100);
+      const Q = Math.round(res.impact.policy*100);
+      const S = Math.round(res.impact.stability*100);
+      byId("p_bar").style.width = P+"%"; byId("p_pct").textContent = P+"%";
+      byId("q_bar").style.width = Q+"%"; byId("q_pct").textContent = Q+"%";
+      byId("s_bar").style.width = S+"%"; byId("s_pct").textContent = S+"%";
+
+      // layers
+      byId("x0v").textContent = Math.round(res.layers.x0*100)+"%";
+      byId("x1v").textContent = Math.round(res.layers.x1*100)+"%";
+      byId("x2v").textContent = Math.round(res.layers.x2*100)+"%";
+      byId("rfv").textContent = Math.round(res.layers.rf*100)+"%";
+
+      // actions
+      const list = [...res.actions].sort((a,b)=>b.p-a.p);
+      byId("actions").innerHTML = list.map(a=>(
+        `<div class="rowline"><span>${a.key}</span><span class="pill">${(a.p*100).toFixed(1)}%</span></div>`
+      )).join("");
+
+      // note
+      const domImpact = [
+        ["Perception", res.impact.perception],
+        ["Policy", res.impact.policy],
+        ["Stability", res.impact.stability]
+      ].sort((a,b)=>b[1]-a[1])[0][0];
+      byId("note").textContent =
+        `rf is built from x₀ (self-image), x₁ (image of ${B.name}), and x₂ (what ${A.name} thinks ${B.name} thinks of ${A.name}). ` +
+        `Dominant projected impact channel: ${domImpact}. Adjust Info Ops, Media Penetration, and Resilience to see x₂ move.`;
+    }
+
+    function exportJSON(){
+      const payload = {
+        A, B,
+        result: compute(A,B)
+      };
+      const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = "reflexive_result.json";
+      a.click(); URL.revokeObjectURL(url);
+    }
+
+    // init UI
+    mkSliders("slidersA", A);
+    mkSliders("slidersB", B);
+  </script>
+</body>
+</html>
