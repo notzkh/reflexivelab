@@ -257,10 +257,7 @@ input[type="range"] { width: 100%; }
       <div class="card">
         <h2>Reflexive layers</h2>
         <div class="row">
-          <div class="rowline"><span>x₀ (self-image)</span><span class="pill" id="x0v">—</span></div>
-          <div class="rowline"><span>x₁ (image of B)</span><span class="pill" id="x1v">—</span></div>
-          <div class="rowline"><span>x₂ (what A thinks B thinks of A)</span><span class="pill" id="x2v">—</span></div>
-          <div class="rowline" style="border-top:1px solid var(--line); padding-top:8px"><span>rf (reflexive factor)</span><span class="pill" id="rfv">—</span></div>
+          <div id="layers" class="row"></div>
         </div>
       </div>
     </div>
@@ -365,56 +362,78 @@ input[type="range"] { width: 100%; }
     }
 
     function run(){
-      A.name = byId("a_name").value; B.name = byId("b_name").value;
-      loadMapImage(A.name, "a_map_img");
-loadMapImage(B.name, "b_map_img");
+      function run(){
+  // read actor names
+  A.name = byId("a_name").value; 
+  B.name = byId("b_name").value;
 
-      A.ethicalType = byId("a_eth").value; B.ethicalType = byId("b_eth").value;
+  // show maps
+  loadMapImage(A.name, "a_map_img");
+  loadMapImage(B.name, "b_map_img");
 
-      const res = compute(A,B);
+  // update ethics
+  A.ethicalType = byId("a_eth").value; 
+  B.ethicalType = byId("b_eth").value;
 
-      // bars (animate from 0 each time)
-byId("p_bar").style.width = "0%";
-byId("q_bar").style.width = "0%";
-byId("s_bar").style.width = "0%";
+  // compute results
+  const res = compute(A,B);
 
-byId("p_pct").textContent = P+"%";
-byId("q_pct").textContent = Q+"%";
-byId("s_pct").textContent = S+"%";
+  // get impact numbers
+  const P = Math.round(res.impact.perception*100);
+  const Q = Math.round(res.impact.policy*100);
+  const S = Math.round(res.impact.stability*100);
 
-// force reset → then animate
-setTimeout(() => {
-  byId("p_bar").style.width = P+"%";
-  byId("q_bar").style.width = Q+"%";
-  byId("s_bar").style.width = S+"%";
-}, 50);
+  // reset bars to 0 instantly
+  byId("p_bar").style.width = "0%";
+  byId("q_bar").style.width = "0%";
+  byId("s_bar").style.width = "0%";
 
+  // set percentage labels
+  byId("p_pct").textContent = P+"%";
+  byId("q_pct").textContent = Q+"%";
+  byId("s_pct").textContent = S+"%";
 
-      // layers
-      byId("x0v").textContent = Math.round(res.layers.x0*100)+"%";
-      byId("x1v").textContent = Math.round(res.layers.x1*100)+"%";
-      byId("x2v").textContent = Math.round(res.layers.x2*100)+"%";
-      byId("rfv").textContent = Math.round(res.layers.rf*100)+"%";
+  // force reset → then animate fill
+  setTimeout(() => {
+    byId("p_bar").style.width = P+"%";
+    byId("q_bar").style.width = Q+"%";
+    byId("s_bar").style.width = S+"%";
+  }, 50);
 
-      // actions with fade-in stagger
-const list = [...res.actions].sort((a,b)=>b.p-a.p);
-byId("actions").innerHTML = list.map((a,i)=>(
-  `<div class="rowline action-item" style="animation-delay:${i*0.2}s">
-     <span>${a.key}</span>
-     <span class="pill">${(a.p*100).toFixed(1)}%</span>
-   </div>`
-)).join("")
+  // layers with fade-in stagger
+  const layerHTML = [
+    {label:"x₀ (self-image)", val: res.layers.x0},
+    {label:"x₁ (image of B)", val: res.layers.x1},
+    {label:"x₂ (what A thinks B thinks of A)", val: res.layers.x2},
+    {label:"rf (reflexive factor)", val: res.layers.rf}
+  ].map((l,i)=>(
+    `<div class="rowline action-item" style="animation-delay:${i*0.2}s">
+       <span>${l.label}</span>
+       <span class="pill">${Math.round(l.val*100)}%</span>
+     </div>`
+  )).join("");
+  byId("layers").innerHTML = layerHTML;
 
-      // note
-      const domImpact = [
-        ["Perception", res.impact.perception],
-        ["Policy", res.impact.policy],
-        ["Stability", res.impact.stability]
-      ].sort((a,b)=>b[1]-a[1])[0][0];
-      byId("note").textContent =
-        `rf is built from x₀ (self-image), x₁ (image of ${B.name}), and x₂ (what ${A.name} thinks ${B.name} thinks of ${A.name}). ` +
-        `Dominant projected impact channel: ${domImpact}. Adjust Info Ops, Media Penetration, and Resilience to see x₂ move.`;
-    }
+  // actions with fade-in stagger
+  const list = [...res.actions].sort((a,b)=>b.p-a.p);
+  byId("actions").innerHTML = list.map((a,i)=>(
+    `<div class="rowline action-item" style="animation-delay:${i*0.2}s">
+       <span>${a.key}</span>
+       <span class="pill">${(a.p*100).toFixed(1)}%</span>
+     </div>`
+  )).join("");
+
+  // note
+  const domImpact = [
+    ["Perception", res.impact.perception],
+    ["Policy", res.impact.policy],
+    ["Stability", res.impact.stability]
+  ].sort((a,b)=>b[1]-a[1])[0][0];
+
+  byId("note").textContent =
+    `rf is built from x₀ (self-image), x₁ (image of ${B.name}), and x₂ (what ${A.name} thinks ${B.name} thinks of ${A.name}). ` +
+    `Dominant projected impact channel: ${domImpact}. Adjust Info Ops, Media Penetration, and Resilience to see x₂ move.`;
+}
 
     function exportJSON(){
       const payload = {
