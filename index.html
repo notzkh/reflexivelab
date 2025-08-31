@@ -6,88 +6,38 @@
   <title>ReflexiveLab — Lefebvre Simulator (A → B)</title>
   <style>
 :root {
-  --bg: #0a0a0a;
-  --card: #1a1a1a;
-  --text: #f5f5f7;
-  --muted: #9ca3af;
-  --line: #2a2a2a;
-  --accent: #0071e3;
+  --bg: #0a0a0a; --card: #1a1a1a; --text: #f5f5f7; --muted: #9ca3af;
+  --line: #2a2a2a; --accent: #0071e3;
 }
-
-* {
-  box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-body { margin: 0; background: var(--bg); color: var(--text); }
-
-.wrap { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
-
-.row { display: grid; gap: 16px; }
-@media (min-width: 900px){
+* { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+body { margin:0; background:var(--bg); color:var(--text); }
+.wrap { max-width:1100px; margin:40px auto; padding:0 20px; }
+.row { display:grid; gap:16px; }
+@media (min-width:900px){
   .row.cols-2{ grid-template-columns:1fr 1fr }
   .row.cols-3{ grid-template-columns:2fr 1fr 1fr }
 }
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
-}
-
-h1 { margin: 0 0 6px 0; font-weight: 600; font-size: 28px; }
-h2 { margin: 0 0 12px 0; font-size: 18px; font-weight: 500; color: var(--muted); }
-
-label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; }
-
-input[type="text"], select {
-  width: 100%; padding: 10px 12px; border: 1px solid var(--line);
-  border-radius: 12px; background: #111; color: var(--text);
-}
-
-.slider-row { margin-bottom: 14px; }
-.slider-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
-input[type="range"] { width: 100%; }
-
-.btn {
-  cursor: pointer; background: var(--accent); color: #fff; border: none;
-  padding: 10px 16px; border-radius: 12px; font-weight: 500; transition: background .2s ease;
-}
-.btn:hover { background: #005bb5; }
-
-.muted { color: var(--muted); font-size: 13px; }
-
-.bar {
-  background: #2a2a2a; height: 14px; border-radius: 999px; position: relative; overflow: hidden;
-}
-.bar > i {
-  position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent);
-  width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.pill { background: #2a2a2a; padding: 6px 10px; border-radius: 999px; font-size: 12px; color: var(--text); }
-
-.list { display: grid; gap: 8px; }
-
-.rowline { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-
-.note { font-size: 14px; color: var(--text); line-height: 1.5; }
-
-.foot { font-size: 12px; color: var(--muted); }
-
-/* <-- these were accidentally inside .foot before */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.action-item {
-  opacity: 0;
-  animation: fadeInUp 0.6s ease forwards;
-}
+.card { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px; box-shadow:0 4px 16px rgba(0,0,0,.6); }
+h1{margin:0 0 6px 0;font-weight:600;font-size:28px;}
+h2{margin:0 0 12px 0;font-size:18px;font-weight:500;color:var(--muted);}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px;}
+input[type="text"],select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#111;color:var(--text);}
+.slider-row{margin-bottom:14px;}
+.slider-label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);}
+input[type="range"]{width:100%;}
+.btn{cursor:pointer;background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:12px;font-weight:500;transition:background .2s ease;}
+.btn:hover{background:#005bb5;}
+.muted{color:var(--muted);font-size:13px;}
+.bar{background:#2a2a2a;height:14px;border-radius:999px;position:relative;overflow:hidden;}
+.bar>i{position:absolute;left:0;top:0;bottom:0;background:var(--accent);width:0%;transition:width 1s cubic-bezier(0.4,0,0.2,1);}
+.pill{background:#2a2a2a;padding:6px 10px;border-radius:999px;font-size:12px;color:var(--text);}
+.list{display:grid;gap:8px;}
+.rowline{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.note{font-size:14px;color:var(--text);line-height:1.5;}
+.foot{font-size:12px;color:var(--muted);}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.action-item{opacity:0;animation:fadeInUp 0.6s ease forwards;}
 </style>
-
 </head>
 <body>
   <div class="wrap">
@@ -102,36 +52,17 @@ input[type="range"] { width: 100%; }
       <div class="card">
         <h2>1) Actors</h2>
         <div class="row cols-2">
-          <div>
-            <label>Actor A (influencer)</label>
-            <input id="a_name" type="text" value="Actor A"/>
-          </div>
-          <div>
-            <label>Actor B (target)</label>
-            <input id="b_name" type="text" value="Actor B"/>
-          </div>
+          <div><label>Actor A (influencer)</label><input id="a_name" type="text" value="Georgia"/></div>
+          <div><label>Actor B (target)</label><input id="b_name" type="text" value="Russia"/></div>
         </div>
         <div class="row cols-2" style="margin-top:10px">
-          <div>
-            <label>Ethics of A</label>
-            <select id="a_eth">
-              <option>Type I (Internal/Conscience-centric)</option>
-              <option selected>Type II (External/Authority-centric)</option>
-            </select>
-          </div>
-          <div>
-            <label>Ethics of B</label>
-            <select id="b_eth">
-              <option selected>Type I (Internal/Conscience-centric)</option>
-              <option>Type II (External/Authority-centric)</option>
-            </select>
-          </div>
+          <div><label>Ethics of A</label><select id="a_eth"><option>Type I (Internal/Conscience-centric)</option><option selected>Type II (External/Authority-centric)</option></select></div>
+          <div><label>Ethics of B</label><select id="b_eth"><option selected>Type I (Internal/Conscience-centric)</option><option>Type II (External/Authority-centric)</option></select></div>
         </div>
       </div>
-
       <div class="card">
         <h2>2) Scenario (quick presets)</h2>
-        <div class="row" style="grid-template-columns: repeat(5, minmax(0,1fr)); gap:8px;">
+        <div class="row" style="grid-template-columns: repeat(5,minmax(0,1fr)); gap:8px;">
           <button class="btn" onclick="preset('Elections')">Elections</button>
           <button class="btn" onclick="preset('Border')">Border</button>
           <button class="btn" onclick="preset('Sanctions')">Sanctions</button>
@@ -143,260 +74,65 @@ input[type="range"] { width: 100%; }
     </div>
 
     <div class="row cols-2" style="margin-top:16px">
-      <div class="card">
-        <h2>3) A — traits</h2>
-        <div id="slidersA"></div> 
-        <div id="a_map" style="margin-top:10px; text-align:center;">
-  <img id="a_map_img" src="" alt="Country A map" style="max-width:150px;">
-</div>
-      </div>
-      <div class="card">
-        <h2>4) B — traits</h2>
-        <div id="slidersB"></div> 
-        <div id="b_map" style="margin-top:10px; text-align:center;">
-  <img id="b_map_img" src="" alt="Country B map" style="max-width:150px;">
-</div>
-      </div>
+      <div class="card"><h2>3) A — traits</h2><div id="slidersA"></div><div id="a_map" style="margin-top:10px;text-align:center;"><img id="a_map_img" src="" style="max-width:150px;"></div></div>
+      <div class="card"><h2>4) B — traits</h2><div id="slidersB"></div><div id="b_map" style="margin-top:10px;text-align:center;"><img id="b_map_img" src="" style="max-width:150px;"></div></div>
     </div>
 
     <div class="row" style="margin-top:12px">
       <button class="btn" onclick="run()">Run analysis</button>
       <button class="btn" onclick="exportJSON()">Export JSON</button>
-      <div class="foot">Tip: raise A’s “Info Ops Intensity” and B’s “Media Penetration” (with low B “Resilience”) to see x₂ rise.</div>
     </div>
 
     <div class="row cols-3" style="margin-top:16px">
-      <div class="card">
-        <h2>Impact channels (A → B)</h2>
+      <div class="card"><h2>Impact channels (A → B)</h2>
         <div class="row">
-          <div class="rowline"><span>Perception</span><span class="pill" id="p_pct">0%</span></div>
-          <div class="bar"><i id="p_bar"></i></div>
-
-          <div class="rowline" style="margin-top:8px"><span>Policy</span><span class="pill" id="q_pct">0%</span></div>
-          <div class="bar"><i id="q_bar"></i></div>
-
-          <div class="rowline" style="margin-top:8px"><span>Stability</span><span class="pill" id="s_pct">0%</span></div>
-          <div class="bar"><i id="s_bar"></i></div>
+          <div class="rowline"><span>Perception</span><span class="pill" id="p_pct">0%</span></div><div class="bar"><i id="p_bar"></i></div>
+          <div class="rowline" style="margin-top:8px"><span>Policy</span><span class="pill" id="q_pct">0%</span></div><div class="bar"><i id="q_bar"></i></div>
+          <div class="rowline" style="margin-top:8px"><span>Stability</span><span class="pill" id="s_pct">0%</span></div><div class="bar"><i id="s_bar"></i></div>
         </div>
       </div>
-
-      <div class="card">
-        <h2>Likely A → B posture</h2>
-        <div class="list" id="actions"></div>
-      </div>
-
-      <div class="card">
-        <h2>Reflexive layers</h2>
-        <div class="row">
-          <div id="layers" class="row"></div>
-        </div>
-      </div>
+      <div class="card"><h2>Likely A → B posture</h2><div class="list" id="actions"></div></div>
+      <div class="card"><h2>Reflexive layers</h2><div id="layers" class="list"></div></div>
     </div>
 
-    <div class="card" style="margin-top:16px">
-      <h2>Analytical note</h2>
-      <div class="note" id="note">Pick a preset and click “Run analysis.” This tool is inspired by Lefebvre’s reflexive theory and is for educational analysis only.</div>
-      <div class="foot" style="margin-top:8px">Ethics: Type I favors internal conscience; Type II favors external/authority “good.” Use responsibly.</div>
-    </div>
+    <div class="card" style="margin-top:16px"><h2>Analytical note</h2><div class="note" id="note">Pick a preset and click “Run analysis.”</div></div>
   </div>
+
 <script>
-// ---------- helpers ----------
-const clamp01 = x => Math.max(0, Math.min(1, x));
-const sig = z => 1 / (1 + Math.exp(-z));
-const byId = id => document.getElementById(id);
+const clamp01=x=>Math.max(0,Math.min(1,x));
+const sig=z=>1/(1+Math.exp(-z));
+const byId=id=>document.getElementById(id);
 
-const TRAITS = [
-  ["riskTolerance","Risk tolerance"],
-  ["domesticFragility","Domestic fragility"],
-  ["capabilities","Capabilities"],
-  ["infoOpsIntensity","Info ops intensity"],
-  ["mediaPenetration","Media penetration (in target)"],
-  ["alliancePressure","Alliance pressure (against you)"],
-  ["resilience","Resilience (civic / media / institutions)"]
-];
+const TRAITS=[["riskTolerance","Risk tolerance"],["domesticFragility","Domestic fragility"],["capabilities","Capabilities"],["infoOpsIntensity","Info ops intensity"],["mediaPenetration","Media penetration (in target)"],["alliancePressure","Alliance pressure (against you)"],["resilience","Resilience (civic / media / institutions)"]];
 
-let A = { name:"Actor A", ethicalType:"Type II (External/Authority-centric)", riskTolerance:.55, domesticFragility:.35, capabilities:.60, infoOpsIntensity:.70, mediaPenetration:.60, alliancePressure:.20, resilience:.50 };
-let B = { name:"Actor B", ethicalType:"Type I (Internal/Conscience-centric)", riskTolerance:.40, domesticFragility:.45, capabilities:.50, infoOpsIntensity:.40, mediaPenetration:.55, alliancePressure:.60, resilience:.60 };
+let A={name:"Georgia",ethicalType:"Type II (External/Authority-centric)",riskTolerance:.55,domesticFragility:.35,capabilities:.60,infoOpsIntensity:.70,mediaPenetration:.60,alliancePressure:.20,resilience:.50};
+let B={name:"Russia",ethicalType:"Type I (Internal/Conscience-centric)",riskTolerance:.40,domesticFragility:.45,capabilities:.50,infoOpsIntensity:.40,mediaPenetration:.55,alliancePressure:.60,resilience:.60};
 
-function ethicsWeights(t){ return t.includes("Type I") ? {internal:.7, external:.3} : {internal:.3, external:.7}; }
+function mkSliders(containerId,whoTag){const who=(whoTag==="A")?A:B;const el=byId(containerId);el.innerHTML="";TRAITS.forEach(([key,label])=>{const value=who[key];const row=document.createElement("div");row.className="slider-row";row.innerHTML=`<div class="slider-label"><span>${label}</span><span id="${containerId}_${key}_v">${Math.round(value*100)}%</span></div><input type="range" min="0" max="1" step="0.01" value="${value}" id="${containerId}_${key}">`;el.appendChild(row);byId(`${containerId}_${key}`).addEventListener("input",e=>{if(whoTag==="A")A[key]=+e.target.value;else B[key]=+e.target.value;byId(`${containerId}_${key}_v`).textContent=Math.round(+e.target.value*100)+"%";});});}
 
-function mkSliders(containerId, who){
-  const el = byId(containerId);
-  el.innerHTML = "";
-  TRAITS.forEach(([key, label])=>{
-    const value = who===A ? A[key] : B[key];
-    const row = document.createElement("div");
-    row.className="slider-row";
-    row.innerHTML = `
-      <div class="slider-label"><span>${label}</span><span id="${containerId}_${key}_v">${Math.round(value*100)}%</span></div>
-      <input type="range" min="0" max="1" step="0.01" value="${value}" id="${containerId}_${key}">
-    `;
-    el.appendChild(row);
-    byId(`${containerId}_${key}`).addEventListener("input", (e)=>{
-      (who===A ? A : B)[key] = +e.target.value;
-      byId(`${containerId}_${key}_v`).textContent = Math.round(+e.target.value*100) + "%";
-      // live update optional:
-      // run();
-    });
-  });
-}
+function compute(A,B){const x0=clamp01(0.6*(1-A.domesticFragility)+0.4*A.riskTolerance);const x1=clamp01(0.5*B.capabilities+0.5*(1-B.alliancePressure));const x2=clamp01(sig(3*(B.infoOpsIntensity*A.mediaPenetration-A.resilience)));const rf=clamp01(0.4*x0+0.3*x1+0.3*x2);const capRatio=clamp01((A.capabilities+1e-6)/(A.capabilities+B.capabilities+1e-6));const E_perc=clamp01(sig(2.0*(A.infoOpsIntensity*B.mediaPenetration-B.resilience)+1.2*rf));const E_pol=clamp01(sig(2.2*(capRatio-B.alliancePressure)+0.8*rf));const E_stab=clamp01(sig(2.0*(B.domesticFragility*A.infoOpsIntensity-B.resilience)+1.0*rf));const pCoop=sig(3*(0.6*(1-A.riskTolerance)+0.4*(1-capRatio))-1.2+0.6*(1-B.alliancePressure));const pCoer=sig(3*(0.5*capRatio+0.5*A.riskTolerance)+0.5*rf-1.0);const pDecv=sig(3*(0.6*A.infoOpsIntensity+0.4*rf)-0.8);const pDees=sig(3*(0.6*B.alliancePressure+0.4*(1-A.riskTolerance))-0.9);const sum=pCoop+pCoer+pDecv+pDees+1e-9;return{layers:{x0,x1,x2,rf},impact:{perception:E_perc,policy:E_pol,stability:E_stab},actions:[{key:"Cooperate / Engage",p:pCoop/sum},{key:"Coerce / Compel",p:pCoer/sum},{key:"Deceive / Influence (IO)",p:pDecv/sum},{key:"De-escalate / Pause",p:pDees/sum}]};}
 
-function preset(which){
-  const aEth = byId("a_eth").value, bEth = byId("b_eth").value;
-  if(which==="Elections"){
-    A = { ...A, ethicalType:aEth, riskTolerance:.55, domesticFragility:.35, infoOpsIntensity:.70, mediaPenetration:.60, capabilities:.60, alliancePressure:.20, resilience:.50 };
-    B = { ...B, ethicalType:bEth, riskTolerance:.40, domesticFragility:.45, infoOpsIntensity:.40, mediaPenetration:.55, capabilities:.50, alliancePressure:.60, resilience:.60 };
-  } else if(which==="Border"){
-    A = { ...A, ethicalType:aEth, riskTolerance:.70, domesticFragility:.30, infoOpsIntensity:.50, mediaPenetration:.50, capabilities:.70, alliancePressure:.30, resilience:.55 };
-    B = { ...B, ethicalType:bEth, riskTolerance:.50, domesticFragility:.40, infoOpsIntensity:.35, mediaPenetration:.50, capabilities:.60, alliancePressure:.65, resilience:.65 };
-  } else if(which==="Sanctions"){
-    A = { ...A, ethicalType:aEth, riskTolerance:.45, domesticFragility:.50, infoOpsIntensity:.50, mediaPenetration:.60, capabilities:.55, alliancePressure:.50, resilience:.60 };
-    B = { ...B, ethicalType:bEth, riskTolerance:.55, domesticFragility:.35, infoOpsIntensity:.60, mediaPenetration:.55, capabilities:.60, alliancePressure:.25, resilience:.55 };
-  } else if(which==="Cyber"){
-    A = { ...A, ethicalType:aEth, riskTolerance:.60, domesticFragility:.40, infoOpsIntensity:.80, mediaPenetration:.65, capabilities:.55, alliancePressure:.35, resilience:.55 };
-    B = { ...B, ethicalType:bEth, riskTolerance:.45, domesticFragility:.45, infoOpsIntensity:.45, mediaPenetration:.60, capabilities:.55, alliancePressure:.60, resilience:.65 };
-  } else {
-    A = { ...A, ethicalType:aEth };
-    B = { ...B, ethicalType:bEth };
-  }
-  mkSliders("slidersA", A);
-  mkSliders("slidersB", B);
-}
+function loadMapImage(name,targetId){if(!name)return;const input=name.trim().toLowerCase();const mapping={
+"afghanistan":"af","albania":"al","algeria":"dz","andorra":"ad","angola":"ao","argentina":"ar","armenia":"am","australia":"au","austria":"at","azerbaijan":"az","bahamas":"bs","bahrain":"bh","bangladesh":"bd","belarus":"by","belgium":"be","belize":"bz","benin":"bj","bhutan":"bt","bolivia":"bo","bosnia and herzegovina":"ba","botswana":"bw","brazil":"br","bulgaria":"bg","cambodia":"kh","cameroon":"cm","canada":"ca","chile":"cl","china":"cn","colombia":"co","costa rica":"cr","croatia":"hr","cuba":"cu","cyprus":"cy","czechia":"cz","czech republic":"cz","denmark":"dk","dominican republic":"do","ecuador":"ec","egypt":"eg","estonia":"ee","ethiopia":"et","finland":"fi","france":"fr","georgia":"ge","germany":"de","greece":"gr","hungary":"hu","iceland":"is","india":"in","indonesia":"id","iran":"ir","iraq":"iq","ireland":"ie","israel":"il","italy":"it","japan":"jp","jordan":"jo","kazakhstan":"kz","kenya":"ke","kuwait":"kw","kyrgyzstan":"kg","latvia":"lv","lebanon":"lb","libya":"ly","lithuania":"lt","luxembourg":"lu","madagascar":"mg","malaysia":"my","maldives":"mv","mali":"ml","malta":"mt","mexico":"mx","moldova":"md","monaco":"mc","mongolia":"mn","montenegro":"me","morocco":"ma","mozambique":"mz","myanmar":"mm","nepal":"np","netherlands":"nl","new zealand":"nz","nigeria":"ng","north korea":"kp","north macedonia":"mk","norway":"no","pakistan":"pk","palestine":"ps","panama":"pa","paraguay":"py","peru":"pe","philippines":"ph","poland":"pl","portugal":"pt","qatar":"qa","romania":"ro","russia":"ru","saudi arabia":"sa","senegal":"sn","serbia":"rs","singapore":"sg","slovakia":"sk","slovenia":"si","south africa":"za","south korea":"kr","spain":"es","sri lanka":"lk","sudan":"sd","sweden":"se","switzerland":"ch","syria":"sy","tajikistan":"tj","tanzania":"tz","thailand":"th","tunisia":"tn","turkey":"tr","turkmenistan":"tm","ukraine":"ua","united arab emirates":"ae","united kingdom":"gb","uk":"gb","britain":"gb","england":"gb","united states":"us","usa":"us","us":"us","uruguay":"uy","uzbekistan":"uz","venezuela":"ve","vietnam":"vn","yemen":"ye","zimbabwe":"zw"};const code=mapping[input];byId(targetId).src=code?`https://flagcdn.com/${code}.svg`:"";}
 
-function compute(A,B){
-  const wA = ethicsWeights(A.ethicalType);
-  const x0 = clamp01(0.6*(1 - A.domesticFragility) + 0.4*A.riskTolerance);
-  const x1 = clamp01(0.5*B.capabilities + 0.5*(1 - B.alliancePressure));
-  const x2 = clamp01(sig(3*(B.infoOpsIntensity*A.mediaPenetration - A.resilience)));
-  const rf = clamp01(0.4*x0 + 0.3*x1 + 0.3*x2);
+function run(){A.name=byId("a_name").value;B.name=byId("b_name").value;A.ethicalType=byId("a_eth").value;B.ethicalType=byId("b_eth").value;
+loadMapImage(A.name,"a_map_img");loadMapImage(B.name,"b_map_img");const res=compute(A,B);
+const P=Math.round(res.impact.perception*100),Q=Math.round(res.impact.policy*100),S=Math.round(res.impact.stability*100);
+byId("p_bar").style.width="0%";byId("q_bar").style.width="0%";byId("s_bar").style.width="0%";
+byId("p_pct").textContent=P+"%";byId("q_pct").textContent=Q+"%";byId("s_pct").textContent=S+"%";
+setTimeout(()=>{byId("p_bar").style.width=P+"%";byId("q_bar").style.width=Q+"%";byId("s_bar").style.width=S+"%";},50);
+byId("layers").innerHTML=[{label:"x₀ (self-image)",val:res.layers.x0},{label:"x₁ (image of B)",val:res.layers.x1},{label:"x₂ (what A thinks B thinks of A)",val:res.layers.x2},{label:"rf (reflexive factor)",val:res.layers.rf}].map((l,i)=>`<div class="rowline action-item" style="animation-delay:${i*0.2}s"><span>${l.label}</span><span class="pill">${Math.round(l.val*100)}%</span></div>`).join("");
+byId("actions").innerHTML=[...res.actions].sort((a,b)=>b.p-a.p).map((a,i)=>`<div class="rowline action-item" style="animation-delay:${i*0.2}s"><span>${a.key}</span><span class="pill">${(a.p*100).toFixed(1)}%</span></div>`).join("");
+const domImpact=[["Perception",res.impact.perception],["Policy",res.impact.policy],["Stability",res.impact.stability]].sort((a,b)=>b[1]-a[1])[0][0];
+byId("note").textContent=`rf is built from x₀ (self-image), x₁ (image of ${B.name}), and x₂ (what ${A.name} thinks ${B.name} thinks of ${A.name}). Dominant projected impact channel: ${domImpact}.`; }
 
-  const capRatio = clamp01((A.capabilities + 1e-6) / (A.capabilities + B.capabilities + 1e-6));
-  const E_perc = clamp01(sig(2.0*(A.infoOpsIntensity*B.mediaPenetration - B.resilience) + 1.2*rf));
-  const E_pol  = clamp01(sig(2.2*(capRatio - B.alliancePressure) + 0.8*rf));
-  const E_stab = clamp01(sig(2.0*(B.domesticFragility*A.infoOpsIntensity - B.resilience) + 1.0*rf));
+function exportJSON(){const payload={A,B,result:compute(A,B)};const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="reflexive_result.json";a.click();URL.revokeObjectURL(url);}
 
-  const pCoop = sig(3*(0.6*(1-A.riskTolerance)+0.4*(1-capRatio)) - 1.2 + 0.6*(1-B.alliancePressure));
-  const pCoer = sig(3*(0.5*capRatio + 0.5*A.riskTolerance) + 0.5*rf - 1.0);
-  const pDecv = sig(3*(0.6*A.infoOpsIntensity + 0.4*rf) - 0.8);
-  const pDees = sig(3*(0.6*B.alliancePressure + 0.4*(1-A.riskTolerance)) - 0.9);
-  const sum = pCoop + pCoer + pDecv + pDees + 1e-9;
-
-  return {
-    layers: { x0, x1, x2, rf, capRatio },
-    impact: { perception:E_perc, policy:E_pol, stability:E_stab },
-    actions: [
-      { key:"Cooperate / Engage", p: pCoop/sum },
-      { key:"Coerce / Compel",   p: pCoer/sum },
-      { key:"Deceive / Influence (IO)", p: pDecv/sum },
-      { key:"De-escalate / Pause", p: pDees/sum }
-    ]
-  };
-}
-
-// Minimalist map loader (case-insensitive + aliases)
-function loadMapImage(name, targetId) {
-  if (!name) return;
-  const input = name.trim().toLowerCase();
-  const mapping = {
-    "afghanistan":"af","albania":"al","algeria":"dz","andorra":"ad","angola":"ao","argentina":"ar","armenia":"am","australia":"au","austria":"at","azerbaijan":"az",
-    "bahamas":"bs","bahrain":"bh","bangladesh":"bd","belarus":"by","belgium":"be","belize":"bz","benin":"bj","bhutan":"bt","bolivia":"bo","bosnia and herzegovina":"ba",
-    "botswana":"bw","brazil":"br","bulgaria":"bg","cambodia":"kh","cameroon":"cm","canada":"ca","chile":"cl","china":"cn","colombia":"co","costa rica":"cr",
-    "croatia":"hr","cuba":"cu","cyprus":"cy","czechia":"cz","czech republic":"cz","denmark":"dk","dominican republic":"do","ecuador":"ec","egypt":"eg","estonia":"ee",
-    "ethiopia":"et","finland":"fi","france":"fr","georgia":"ge","germany":"de","greece":"gr","hungary":"hu","iceland":"is","india":"in","indonesia":"id",
-    "iran":"ir","iraq":"iq","ireland":"ie","israel":"il","italy":"it","japan":"jp","jordan":"jo","kazakhstan":"kz","kenya":"ke","kuwait":"kw",
-    "kyrgyzstan":"kg","latvia":"lv","lebanon":"lb","libya":"ly","lithuania":"lt","luxembourg":"lu","madagascar":"mg","malaysia":"my","maldives":"mv","mali":"ml",
-    "malta":"mt","mexico":"mx","moldova":"md","monaco":"mc","mongolia":"mn","montenegro":"me","morocco":"ma","mozambique":"mz","myanmar":"mm","nepal":"np",
-    "netherlands":"nl","new zealand":"nz","nigeria":"ng","north korea":"kp","north macedonia":"mk","norway":"no","pakistan":"pk","palestine":"ps","panama":"pa","paraguay":"py",
-    "peru":"pe","philippines":"ph","poland":"pl","portugal":"pt","qatar":"qa","romania":"ro","russia":"ru","saudi arabia":"sa","senegal":"sn","serbia":"rs",
-    "singapore":"sg","slovakia":"sk","slovenia":"si","south africa":"za","south korea":"kr","spain":"es","sri lanka":"lk","sudan":"sd","sweden":"se","switzerland":"ch",
-    "syria":"sy","tajikistan":"tj","tanzania":"tz","thailand":"th","tunisia":"tn","turkey":"tr","turkmenistan":"tm","ukraine":"ua","united arab emirates":"ae","united kingdom":"gb",
-    "uk":"gb","britain":"gb","england":"gb","united states":"us","usa":"us","us":"us","uruguay":"uy","uzbekistan":"uz","venezuela":"ve","vietnam":"vn","yemen":"ye","zimbabwe":"zw"
-  };
-  const code = mapping[input];
-  byId(targetId).src = code ? `https://flagcdn.com/${code}.svg` : "";
-}
-
-function run(){
-  // names & ethics
-  A.name = byId("a_name").value; 
-  B.name = byId("b_name").value;
-  A.ethicalType = byId("a_eth").value; 
-  B.ethicalType = byId("b_eth").value;
-
-  // maps
-  loadMapImage(A.name, "a_map_img");
-  loadMapImage(B.name, "b_map_img");
-
-  // compute
-  const res = compute(A,B);
-
-  // impact %
-  const P = Math.round(res.impact.perception*100);
-  const Q = Math.round(res.impact.policy*100);
-  const S = Math.round(res.impact.stability*100);
-
-  // reset bars then animate
-  byId("p_bar").style.width = "0%";
-  byId("q_bar").style.width = "0%";
-  byId("s_bar").style.width = "0%";
-  byId("p_pct").textContent = P+"%";
-  byId("q_pct").textContent = Q+"%";
-  byId("s_pct").textContent = S+"%";
-  setTimeout(() => {
-    byId("p_bar").style.width = P+"%";
-    byId("q_bar").style.width = Q+"%";
-    byId("s_bar").style.width = S+"%";
-  }, 50);
-
-  // layers (animated list)
-  const layerHTML = [
-    {label:"x₀ (self-image)", val: res.layers.x0},
-    {label:"x₁ (image of B)", val: res.layers.x1},
-    {label:"x₂ (what A thinks B thinks of A)", val: res.layers.x2},
-    {label:"rf (reflexive factor)", val: res.layers.rf}
-  ].map((l,i)=>(
-    `<div class="rowline action-item" style="animation-delay:${i*0.2}s">
-       <span>${l.label}</span>
-       <span class="pill">${Math.round(l.val*100)}%</span>
-     </div>`
-  )).join("");
-  byId("layers").innerHTML = layerHTML;
-
-  // actions (animated list)
-  const list = [...res.actions].sort((a,b)=>b.p-a.p);
-  byId("actions").innerHTML = list.map((a,i)=>(
-    `<div class="rowline action-item" style="animation-delay:${i*0.2}s">
-       <span>${a.key}</span>
-       <span class="pill">${(a.p*100).toFixed(1)}%</span>
-     </div>`
-  )).join("");
-
-  // note
-  const domImpact = [
-    ["Perception", res.impact.perception],
-    ["Policy", res.impact.policy],
-    ["Stability", res.impact.stability]
-  ].sort((a,b)=>b[1]-a[1])[0][0];
-  byId("note").textContent =
-    `rf is built from x₀ (self-image), x₁ (image of ${B.name}), and x₂ (what ${A.name} thinks ${B.name} thinks of ${A.name}). ` +
-    `Dominant projected impact channel: ${domImpact}. Adjust Info Ops, Media Penetration, and Resilience to see x₂ move.`;
-}
-
-function exportJSON(){
-  const payload = { A, B, result: compute(A,B) };
-  const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = "reflexive_result.json";
-  a.click(); URL.revokeObjectURL(url);
-}
-
-// init UI
-mkSliders("slidersA", A);
-mkSliders("slidersB", B);
-// optional: run()  // uncomment to render immediately on load
+mkSliders("slidersA","A");
+mkSliders("slidersB","B");
+// auto load flags on page load
+loadMapImage(A.name,"a_map_img");
+loadMapImage(B.name,"b_map_img");
 </script>
-
-  
 </body>
 </html>
